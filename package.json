@@ -1,0 +1,36 @@
+{
+	"name": "unitd",
+	"version": "0.0.0",
+	"description": "Unit awesomesauce",
+	"keywords": [],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/MIT"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/scothis/unitd.git"
+	},
+	"bugs": "https://github.com/scothis/unitd/issues",
+	"maintainers": [
+		{
+			"name": "Scott Andrews",
+			"email": "scott@vannevartech.com"
+		}
+	],
+	"contributors": [],
+	"devDependencies": {
+		"test-support": "~0.3",
+		"curl": "https://github.com/cujojs/curl/tarball/0.8.4",
+		"poly": "https://github.com/cujojs/poly/tarball/0.6.0"
+	},
+	"main": "./unitd",
+	"scripts": {
+		"test": "jshint . && buster test --node",
+		"ci": "npm test && sauceme",
+		"start": "buster static -e browser",
+		"tunnel": "sauceme -m"
+	}
+}
