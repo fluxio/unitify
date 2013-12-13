@@ -98,6 +98,10 @@
             return new Measure(this.raw * this.unit.scale / unit.scale, unit, this.precision);
         };
 
+        Measure.prototype.toString = function toString() {
+            return this.abbr ? this.val + ' ' + this.abbr : this.val;
+        };
+
         function Unit() { throw new Error('Unit is not constructable'); }
         Object.defineProperty(Unit, 'prototype', { value: Unit.prototype });
         Unit.register = function register(type, name, abbr, scale) {

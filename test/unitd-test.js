@@ -121,6 +121,12 @@
                         }
                     }
                 },
+                'toString': function () {
+                    assert.same(unitd(4.567, unitd.distance.kilometer).toString(), '4.567 mi');
+                    assert.same(unitd(4.567, unitd.distance.kilometer, 2).toString(), '4.6 mi');
+                    assert.same(unitd(4.567).toString(), '4.567');
+                    assert.same(unitd(4.567, 2).toString(), '4.6');
+                },
                 'operation': {
                     'add': function () {
                         var a = unitd(3),
