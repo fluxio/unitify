@@ -8,6 +8,12 @@
 (function (define) {
 	'use strict';
 
+    // EMCAScript requires at least between 1 and 21 digits of precision.
+    // Some implementations may exceed this range
+    // TODO should we test for precision limits?
+    var MAX_PRECISION = 21,
+        MIN_PRECISION = 1;
+
 	define(function () {
 
         function Operations() {
@@ -34,20 +40,40 @@
             };
         }
 
-        function Measure(value) {
+        function Measure(value, precision) {
             if (value instanceof Measure) {
-                value = value.val();
+                precision = value.precision();
+                value = value.raw();
             }
-            else if (typeof value !== 'number') {
-                value = Number(value).valueOf();
-            }
-            if (isNaN(value)) {
-                // TODO use non-coerced value in error message
-                throw new Error('A number is required, found [' + value + ']');
+            else {
+                if (typeof precision !== 'number') {
+                    // TODO should we infer precision from value
+                    precision = Number(precision).valueOf();
+                }
+                if (isNaN(precision)) {
+                    precision = MAX_PRECISION;
+                }
+
+                if (typeof value !== 'number') {
+                    value = Number(value).valueOf();
+                }
+                if (isNaN(value)) {
+                    // TODO use non-coerced value in error message
+                    throw new Error('A number is required, found [' + value + ']');
+                }
+
+                precision = Math.max(Math.min(precision, MAX_PRECISION), MIN_PRECISION);
             }
 
-            this.val = function val() {
+            this.val = function () {
+                // TODO there's probably a more efficient way to drop precision
+                return Number(value.toPrecision(precision));
+            };
+            this.raw = function () {
                 return value;
+            };
+            this.precision = function () {
+                return precision;
             };
         }
 
@@ -55,11 +81,11 @@
 
         // automatically add operation to Measure instances
         operations.onRegister(function (name, func) {
-            Measure.prototype[name] = function (num) {
-                if (!(num instanceof Measure)) {
-                    num = new Measure(num);
+            Measure.prototype[name] = function (measure) {
+                if (!(measure instanceof Measure)) {
+                    measure = new Measure(measure);
                 }
-                return new Measure(func(this.val(), num.val()));
+                return new Measure(func(this.raw(), measure.raw()), Math.min(this.precision(), measure.precision()));
             };
         });
 
