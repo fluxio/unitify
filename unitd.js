@@ -34,8 +34,8 @@
             };
         }
 
-        function Num(value) {
-            if (value instanceof Num) {
+        function Measure(value) {
+            if (value instanceof Measure) {
                 value = value.val();
             }
             else if (typeof value !== 'number') {
@@ -53,13 +53,13 @@
 
         var operations = new Operations();
 
-        // automatically add operation to Num instances
+        // automatically add operation to Measure instances
         operations.onRegister(function (name, func) {
-            Num.prototype[name] = function (num) {
-                if (!(num instanceof Num)) {
-                    num = new Num(num);
+            Measure.prototype[name] = function (num) {
+                if (!(num instanceof Measure)) {
+                    num = new Measure(num);
                 }
-                return new Num(func(this.val(), num.val()));
+                return new Measure(func(this.val(), num.val()));
             };
         });
 
@@ -70,7 +70,7 @@
         operations.register('divide',   function (a, b) { return a / b; });
 
 		return {
-            Num: Num,
+            Measure: Measure,
             operations: operations
         };
 

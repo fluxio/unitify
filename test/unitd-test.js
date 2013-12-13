@@ -44,39 +44,39 @@
 					assert.same(divide(3, -2), -1.5);
 				}
 			},
-			'Num': {
+			'Measure': {
 				'val': function () {
-					assert.same(new unitd.Num(3).val(), 3);
+					assert.same(new unitd.Measure(3).val(), 3);
 				},
 				'ctor': {
-					'Num': function () {
-						var num = new unitd.Num(3);
-						assert.same(new unitd.Num(num).val(), 3);
+					'Measure': function () {
+						var num = new unitd.Measure(3);
+						assert.same(new unitd.Measure(num).val(), 3);
 					},
 					'Number': function () {
 						var num = Number(3);
-						assert.same(new unitd.Num(num).val(), 3);
+						assert.same(new unitd.Measure(num).val(), 3);
 					},
 					'number': function () {
 						var num = 3;
-						assert.same(new unitd.Num(num).val(), 3);
+						assert.same(new unitd.Measure(num).val(), 3);
 					},
 					'string': function () {
 						var num = '3';
-						assert.same(new unitd.Num(num).val(), 3);
+						assert.same(new unitd.Measure(num).val(), 3);
 					},
 					'String': function () {
 						var num = String('3');
-						assert.same(new unitd.Num(num).val(), 3);
+						assert.same(new unitd.Measure(num).val(), 3);
 					},
 					'Object': function () {
 						var num = { toString: function () { return '3'; } };
-						assert.same(new unitd.Num(num).val(), 3);
+						assert.same(new unitd.Measure(num).val(), 3);
 					},
 					'undefined': function () {
 						var num;
 						try {
-							num = new unitd.Num(num);
+							num = new unitd.Measure(num);
 							fail('Error expected');
 						}
 						catch (e) {
@@ -87,7 +87,7 @@
 					'NaN': function () {
 						var num = NaN;
 						try {
-							num = new unitd.Num(num);
+							num = new unitd.Measure(num);
 							fail('Error expected');
 						}
 						catch (e) {
@@ -97,29 +97,15 @@
 					}
 				},
 				'operation': {
-					'with Num': function () {
-						var a = new unitd.Num(3),
-						    b = new unitd.Num(5),
+					'add': function () {
+						var a = new unitd.Measure(3),
+						    b = new unitd.Measure(5),
 						    sum = a.add(b);
-						assert(sum instanceof unitd.Num);
-						assert.same(sum.val(), 8);
-					},
-					'with primative': function () {
-						var a = new unitd.Num(3),
-						    b = 5,
-						    sum = a.add(b);
-						assert(sum instanceof unitd.Num);
-						assert.same(sum.val(), 8);
-					},
-					'with Number': function () {
-						var a = new unitd.Num(3),
-						    b = Number(5),
-						    sum = a.add(b);
-						assert(sum instanceof unitd.Num);
+						assert(sum instanceof unitd.Measure);
 						assert.same(sum.val(), 8);
 					},
 					'chain': function () {
-						var num = new unitd.Num(4).add(3).multiply(4).divide(2).subtract(1);
+						var num = new unitd.Measure(4).add(3).multiply(4).divide(2).subtract(1);
 						assert.same(num.val(), 13);
 					}
 				}
