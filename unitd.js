@@ -183,7 +183,6 @@
         operations.register('divide',   function (a, b) { return a / b; });
 
         Object.defineProperties(Measure, {
-            Measure: { enumerable: true, value: Measure },
             Unit: { enumerable: true, value: Unit },
             operations: { enumerable: true, value: operations }
         });

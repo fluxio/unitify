@@ -126,7 +126,7 @@
                         var a = unitd(3),
                             b = unitd(5),
                             sum = a.add(b);
-                        assert(sum instanceof unitd.Measure);
+                        assert(sum instanceof unitd);
                         assert.same(sum.raw, 8);
                     },
                     'chain': function () {
