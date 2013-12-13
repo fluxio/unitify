@@ -22,13 +22,13 @@
             var ops = {},
                 listeners = [];
 
-            this.register = function register(name, func) {
+            this.register = function register(name, func, opts) {
                 if (ops.hasOwnProperty(name)) {
                     throw new Error('Operation [' + name + '] is already registered');
                 }
                 ops[name] = func;
                 listeners.forEach(function (listener) {
-                    listener(name, func);
+                    listener(name, func, opts);
                 });
             };
 
@@ -147,28 +147,41 @@
         var operations = new Operations();
 
         // automatically add operation to Measure instances
-        operations.onRegister(function (name, operation) {
+        operations.onRegister(function (name, operation, opts) {
             Measure.prototype[name] = function (measure) {
                 if (!(measure instanceof Measure)) {
                     // always use same argument signature as Measure
                     measure = Object.create(Measure.prototype);
                     Measure.apply(measure, arguments);
                 }
-                if (!this.unit.isComparable(measure.unit)) {
-                    throw new Error('Unit ' + this.unit + ' is not comparable to ' + measure.unit);
+                if (!opts.tranformative) {
+                    if (!this.unit.isComparable(measure.unit)) {
+                        throw new Error('Unit ' + this.unit + ' is not comparable to ' + measure.unit);
+                    }
+                    return new Measure(
+                        operation(this.raw * this.unit.scale, measure.raw * measure.unit.scale) / this.unit.scale,
+                        this.unit,
+                        Math.min(this.precision, measure.precision)
+                    );
                 }
-                return new Measure(
-                    operation(this.raw * this.unit.scale, measure.raw * measure.unit.scale) / this.unit.scale,
-                    this.unit,
-                    Math.min(this.precision, measure.precision)
-                );
+                else if (opts.magnitude && (measure.unit === MAGNITUDE_UNIT || this.unit === MAGNITUDE_UNIT)) {
+                    return new Measure(
+                        operation(this.raw, measure.raw),
+                        this.unit === MAGNITUDE_UNIT ? measure.unit : this.unit,
+                        Math.min(this.precision, measure.precision)
+                    );
+                }
+                else {
+                    // check types to see if we have a mapping
+                    throw new Error('Unit tranformative operations are not yet supported');
+                }
             };
         });
 
         // define basic units
-        Unit.register('amount', 'count', '', 1);
-        Unit.register('amount', 'mole', 'mol', 1);
-        Unit.register('distance', 'astronomicalUnit', 'au', 149597870700);
+        Unit.register('amount', 'count', '',    1);
+        Unit.register('amount', 'mole',  'mol', 1);
+        Unit.register('distance', 'astronomicalUnit', 'au', 149597870700      );
         Unit.register('distance', 'kilometer',        'km',         1000      );
         Unit.register('distance', 'meter',            'm',             1      );
         Unit.register('distance', 'millimeter',       'mm',            0.001  );
@@ -182,14 +195,15 @@
         Unit.register('time', 'second', 's',      1);
 
         // register basic math operations
-        operations.register('add',      function (a, b) { return a + b; });
-        operations.register('subtract', function (a, b) { return a - b; });
-        operations.register('multiply', function (a, b) { return a * b; });
-        operations.register('divide',   function (a, b) { return a / b; });
+        operations.register('add',      function (a, b) { return a + b; }, { tranformative: false, magnitude: false });
+        operations.register('subtract', function (a, b) { return a - b; }, { tranformative: false, magnitude: false });
+        operations.register('multiply', function (a, b) { return a * b; }, { tranformative: true,  magnitude: true  });
+        operations.register('divide',   function (a, b) { return a / b; }, { tranformative: true,  magnitude: true  });
 
         Object.defineProperties(Measure, {
             Unit: { enumerable: true, value: Unit },
-            operations: { enumerable: true, value: operations }
+            operations: { enumerable: true, value: operations },
+            magnitude: { enumerable: true, value: MAGNITUDE_UNIT }
         });
 
         return Measure;

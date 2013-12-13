@@ -163,8 +163,51 @@
                         }
                         catch (e) {
                             assert(e instanceof Error);
-                            assert.match(e.message, '');
+                            assert.match(e.message, 'Unit meter is not comparable to count');
                         }
+                    },
+                    'cannot add a magnitude': function () {
+                        var a = unitd(3, unitd.distance.meter),
+                            b = unitd(5);
+                        try {
+                            a.add(b);
+                            fail('Exception expected');
+                        }
+                        catch (e) {
+                            assert(e instanceof Error);
+                            assert.match(e.message, 'Unit meter is not comparable to magnitude');
+                        }
+                        try {
+                            b.add(a);
+                            fail('Exception expected');
+                        }
+                        catch (e) {
+                            assert(e instanceof Error);
+                            assert.match(e.message, 'Unit magnitude is not comparable to meter');
+                        }
+                    },
+                    'cannot add a magnitude, unless its to a magnitude': function () {
+                        var a = unitd(3),
+                            b = unitd(5),
+                            sum = a.add(b);
+                        assert.same(sum.raw, 8);
+                        assert.same(sum.unit, unitd.magnitude);
+                    },
+                    'can multiply a magnitude': function () {
+                        var a = unitd(3, unitd.distance.meter),
+                            b = unitd(2),
+                            product = a.multiply(b),
+                            communitiveProduct = b.multiply(a),
+                            magnitudeProduct = b.multiply(b);
+
+                        assert.same(product.raw, 6);
+                        assert.same(product.unit, unitd.distance.meter);
+
+                        assert.same(communitiveProduct.raw, 6);
+                        assert.same(communitiveProduct.unit, unitd.distance.meter);
+
+                        assert.same(magnitudeProduct.raw, 4);
+                        assert.same(magnitudeProduct.unit, unitd.magnitude);
                     }
                 },
                 'as': {
