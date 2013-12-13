@@ -15,7 +15,8 @@
         // EMCAScript requires at least between 1 and 21 digits of precision.
         // We drop the limit to 15 digits to avoid floating point rounding issues.
         var MAX_PRECISION = 15,
-            MIN_PRECISION = 1;
+            MIN_PRECISION = 1,
+            MAGNITUDE_UNIT;
 
         function Operations() {
             var ops = {},
@@ -73,7 +74,7 @@
                 throw new Error('A number is required, found [' + value + ']');
             }
 
-            unit = unit || Unit._reserved.nonUnited;
+            unit = unit || MAGNITUDE_UNIT;
             precision = Math.max(Math.min(precision, MAX_PRECISION), MIN_PRECISION);
 
             // TODO there's probably a more efficient way to drop precision
@@ -102,11 +103,13 @@
         Unit.register = function register(type, name, abbr, scale) {
             /*jslint evil: true */
             var validNameRE = /^[_a-zA-Z]\w*$/;
-            if (!validNameRE.test(type)) {
-                throw new Error('Type must be a camel case identifier [' + type + ']');
-            }
-            if (!validNameRE.test(name)) {
-                throw new Error('Name must be a camel case identifier [' + name + ']');
+            if (type.slice(0,1) !== '_') {
+                if (!validNameRE.test(type)) {
+                    throw new Error('Type must be a camel case identifier [' + type + ']');
+                }
+                if (!validNameRE.test(name)) {
+                    throw new Error('Name must be a camel case identifier [' + name + ']');
+                }
             }
 
             if (!Unit[type]) {
@@ -135,7 +138,10 @@
                 scale: { enumerable: true, value: scale },
                 toString: { value: function () { return name; } }
             });
+
+            return Unit[type][name];
         };
+        MAGNITUDE_UNIT = Unit.register('_reserved', 'magnitude', '', 1);
 
 
         var operations = new Operations();
@@ -160,7 +166,6 @@
         });
 
         // define basic units
-        Unit.register('_reserved', 'nonUnited', '', 1);
         Unit.register('amount', 'count', '', 1);
         Unit.register('amount', 'mole', 'mol', 1);
         Unit.register('distance', 'astronomicalUnit', 'au', 149597870700);
