@@ -8,7 +8,7 @@
 (function (buster, define) {
     'use strict';
 
-    var assert, refute, fail, undef;
+    var assert, refute, fail;
 
     assert = buster.assertions.assert;
     refute = buster.assertions.refute;
@@ -49,29 +49,29 @@
                     assert.same(unitd(3).raw, 3);
                 },
                 'precision': function () {
-                    assert.same(unitd(3, undef, 2).precision, 2);
+                    assert.same(unitd(3, 2).precision, 2);
 
                     // precision is bounded between 1 and 21
                     assert.same(unitd(3).precision, 15);
-                    assert.same(unitd(3, undef, 100).precision, 15);
-                    assert.same(unitd(3, undef, -100).precision, 1);
+                    assert.same(unitd(3, 100).precision, 15);
+                    assert.same(unitd(3, -100).precision, 1);
                 },
                 'val': function () {
-                    assert.same(unitd(987654321.01234, undef,  1).val, 1000000000);
-                    assert.same(unitd(987654321.01234, undef,  2).val, 990000000);
-                    assert.same(unitd(987654321.01234, undef,  3).val, 988000000);
-                    assert.same(unitd(987654321.01234, undef,  4).val, 987700000);
-                    assert.same(unitd(987654321.01234, undef,  5).val, 987650000);
-                    assert.same(unitd(987654321.01234, undef,  6).val, 987654000);
-                    assert.same(unitd(987654321.01234, undef,  7).val, 987654300);
-                    assert.same(unitd(987654321.01234, undef,  8).val, 987654320);
-                    assert.same(unitd(987654321.01234, undef,  9).val, 987654321);
-                    assert.same(unitd(987654321.01234, undef, 10).val, 987654321.0);
-                    assert.same(unitd(987654321.01234, undef, 11).val, 987654321.01);
-                    assert.same(unitd(987654321.01234, undef, 12).val, 987654321.012);
-                    assert.same(unitd(987654321.01234, undef, 13).val, 987654321.0123);
-                    assert.same(unitd(987654321.01234, undef, 14).val, 987654321.01234);
-                    assert.same(unitd(987654321.01234, undef, 15).val, 987654321.01234);
+                    assert.same(unitd(987654321.01234,  1).val, 1000000000);
+                    assert.same(unitd(987654321.01234,  2).val, 990000000);
+                    assert.same(unitd(987654321.01234,  3).val, 988000000);
+                    assert.same(unitd(987654321.01234,  4).val, 987700000);
+                    assert.same(unitd(987654321.01234,  5).val, 987650000);
+                    assert.same(unitd(987654321.01234,  6).val, 987654000);
+                    assert.same(unitd(987654321.01234,  7).val, 987654300);
+                    assert.same(unitd(987654321.01234,  8).val, 987654320);
+                    assert.same(unitd(987654321.01234,  9).val, 987654321);
+                    assert.same(unitd(987654321.01234, 10).val, 987654321.0);
+                    assert.same(unitd(987654321.01234, 11).val, 987654321.01);
+                    assert.same(unitd(987654321.01234, 12).val, 987654321.012);
+                    assert.same(unitd(987654321.01234, 13).val, 987654321.0123);
+                    assert.same(unitd(987654321.01234, 14).val, 987654321.01234);
+                    assert.same(unitd(987654321.01234, 15).val, 987654321.01234);
                 },
                 'ctor': {
                     'Measure': function () {
@@ -134,7 +134,7 @@
                         assert.same(num.val, 13);
                     },
                     'chained precision': function () {
-                        var num = unitd(4).add(3).multiply(4).divide(2, undef, 1).subtract(1);
+                        var num = unitd(4).add(3).multiply(4).divide(2, 1).subtract(1);
                         assert.same(num.val, 10);
                     },
                     'with same units': function () {

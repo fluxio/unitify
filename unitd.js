@@ -8,6 +8,8 @@
 (function (define) {
     'use strict';
 
+    var undef;
+
     define(function () {
 
         // EMCAScript requires at least between 1 and 21 digits of precision.
@@ -44,7 +46,15 @@
                 return value;
             }
             if (!(this instanceof Measure)) {
-                return new Measure(value, unit, precision);
+                value = Object.create(Measure.prototype);
+                Measure.apply(value, arguments);
+                return value;
+            }
+
+            if (unit !== undef && !(unit instanceof Unit)) {
+                // assume precision is the second argument
+                precision = unit;
+                unit = undef;
             }
 
             if (typeof precision !== 'number') {
