@@ -59,16 +59,19 @@
                 unit = undef;
             }
 
+            if (unit === undef && typeof value === 'string') {
+                unit = Unit.abbrs[value.trim().split(' ').pop()];
+            }
             if (precision === undef && typeof value === 'string') {
                 // TODO strawman precision from value
-                precision = value.replace(/[^0-9]/, '').length;
+                precision = value.replace(/[^0-9]/g, '').length;
             }
             if (typeof value !== 'number') {
-                value = Number(value).valueOf();
+                value = parseFloat(value);
             }
 
             if (typeof precision !== 'number') {
-                precision = Number(precision).valueOf();
+                precision = parseFloat(precision);
             }
             if (isNaN(precision)) {
                 precision = MAX_PRECISION;
@@ -110,9 +113,11 @@
 
         function Unit() { throw new Error('Unit is not constructable'); }
         Object.defineProperty(Unit, 'prototype', { value: Unit.prototype });
+        Unit.abbrs = {};
         Unit.register = function register(type, name, abbr, scale) {
             /*jslint evil: true */
-            var validNameRE = /^[_a-zA-Z]\w*$/;
+            var validNameRE = /^[_a-zA-Z]\w*$/,
+                unit;
             if (type.slice(0,1) !== '_') {
                 if (!validNameRE.test(type)) {
                     throw new Error('Type must be a camel case identifier [' + type + ']');
@@ -140,8 +145,9 @@
             }
 
             // define unit
-            Object.defineProperty(Unit[type], name, { enumerable: true, value: Object.create(Unit[type].prototype) });
-            Object.defineProperties(Unit[type][name], {
+            unit = Object.create(Unit[type].prototype);
+            Object.defineProperty(Unit[type], name, { enumerable: true, value: unit });
+            Object.defineProperties(unit, {
                 name: { enumerable: true, value: name },
                 type: { enumerable: true, value: type },
                 abbr: { enumerable: true, value: abbr },
@@ -149,7 +155,12 @@
                 toString: { value: function () { return name; } }
             });
 
-            return Unit[type][name];
+            // index by abbreviation
+            if (!Unit.abbrs.hasOwnProperty(abbr)) {
+                Unit.abbrs[abbr] = unit;
+            }
+
+            return unit;
         };
         MAGNITUDE_UNIT = Unit.register('_reserved', 'magnitude', '', 1);
 

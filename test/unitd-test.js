@@ -126,6 +126,14 @@
                         assert.same(unitd('123.0').precision, 4);
                         assert.same(unitd('123.0', 1).precision, 1);
                         assert.same(unitd('123.0', 5).precision, 5);
+                    },
+                    'string unit': function () {
+                        var meter = unitd.distance.meter;
+                        assert.same(unitd('2').unit, unitd.magnitude);
+                        assert.same(unitd('2 m').unit, meter);
+                        assert.same(unitd('2', meter).unit, meter);
+                        assert.same(unitd('2 ft', meter).unit, meter);
+                        assert.same(unitd('2 mi m').unit, meter);
                     }
                 },
                 'toString': function () {
