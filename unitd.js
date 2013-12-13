@@ -6,15 +6,14 @@
  */
 
 (function (define) {
-	'use strict';
+    'use strict';
 
-    // EMCAScript requires at least between 1 and 21 digits of precision.
-    // We drop the limit to 15 digits to avoid floating point rounding issues.
-    var MAX_PRECISION = 15,
-        MIN_PRECISION = 1,
-        undef;
+    define(function () {
 
-	define(function () {
+        // EMCAScript requires at least between 1 and 21 digits of precision.
+        // We drop the limit to 15 digits to avoid floating point rounding issues.
+        var MAX_PRECISION = 15,
+            MIN_PRECISION = 1;
 
         function Operations() {
             var ops = {},
@@ -44,26 +43,28 @@
             if (value instanceof Measure) {
                 return value;
             }
-            else {
-                if (typeof precision !== 'number') {
-                    // TODO should we infer precision from value
-                    precision = Number(precision).valueOf();
-                }
-                if (isNaN(precision)) {
-                    precision = MAX_PRECISION;
-                }
-
-                if (typeof value !== 'number') {
-                    value = Number(value).valueOf();
-                }
-                if (isNaN(value)) {
-                    // TODO use non-coerced value in error message
-                    throw new Error('A number is required, found [' + value + ']');
-                }
-
-                unit = unit || Unit.Reserved.NonUnited;
-                precision = Math.max(Math.min(precision, MAX_PRECISION), MIN_PRECISION);
+            if (!(this instanceof Measure)) {
+                return new Measure(value, unit, precision);
             }
+
+            if (typeof precision !== 'number') {
+                // TODO should we infer precision from value
+                precision = Number(precision).valueOf();
+            }
+            if (isNaN(precision)) {
+                precision = MAX_PRECISION;
+            }
+
+            if (typeof value !== 'number') {
+                value = Number(value).valueOf();
+            }
+            if (isNaN(value)) {
+                // TODO use non-coerced value in error message
+                throw new Error('A number is required, found [' + value + ']');
+            }
+
+            unit = unit || Unit._reserved.nonUnited;
+            precision = Math.max(Math.min(precision, MAX_PRECISION), MIN_PRECISION);
 
             // TODO there's probably a more efficient way to drop precision
             this.val = Number(value.toPrecision(precision));
@@ -90,7 +91,7 @@
         Object.defineProperty(Unit, 'prototype', { value: Unit.prototype });
         Unit.register = function register(type, name, abbr, scale) {
             /*jslint evil: true */
-            var validNameRE = /^[A-Z][a-zA-Z0-9]*$/;
+            var validNameRE = /^[_a-zA-Z]\w*$/;
             if (!validNameRE.test(type)) {
                 throw new Error('Type must be a camel case identifier [' + type + ']');
             }
@@ -106,6 +107,10 @@
                     isComparable: { value: function (other) { return other instanceof Unit[type]; } }
                 });
                 Object.defineProperty(Unit[type], 'property', { value: Unit[type].prototype });
+
+                if (!(type in Measure) && type.slice(0,1) !== '_') {
+                    Object.defineProperty(Measure, type, { value: Unit[type] });
+                }
             }
             if (Unit[type][name]) {
                 throw new Error('Unit already exists [' + type + '][' + name + ']');
@@ -127,15 +132,13 @@
 
         // automatically add operation to Measure instances
         operations.onRegister(function (name, operation) {
-            Measure.prototype[name] = function (measure, unit) {
+            Measure.prototype[name] = function (measure) {
                 if (!(measure instanceof Measure)) {
-                    measure = new Measure(measure, unit);
+                    // always use same argument signature as Measure
+                    measure = Object.create(Measure.prototype);
+                    Measure.apply(measure, arguments);
                 }
-                if (this.unit === undef && measure.unit === undef) {
-                    // ok
-                    console.log('hello');
-                }
-                else if (this.unit === undef || !this.unit.isComparable(measure.unit)) {
+                if (!this.unit.isComparable(measure.unit)) {
                     throw new Error('Unit ' + this.unit + ' is not comparable to ' + measure.unit);
                 }
                 return new Measure(
@@ -147,22 +150,21 @@
         });
 
         // define basic units
-        Unit.register('Reserved', 'NonUnited', '', 1);
-        Unit.register('Amount', 'Count', '', 1);
-        Unit.register('Amount', 'Mole', 'mol', 1);
-        Unit.register('Distance', 'AstronomicalUnit', 'au', 149597870700);
-        Unit.register('Distance', 'Kilometer',        'km',         1000      );
-        Unit.register('Distance', 'Meter',            'm',             1      );
-        Unit.register('Distance', 'Millimeter',       'mm',            0.001  );
-        Unit.register('Distance', 'Mile',             'mi',         1609.344  );
-        Unit.register('Distance', 'Yard',             'yd',            0.9144 );
-        Unit.register('Distance', 'Foot',             'ft',            0.30480);
-        Unit.register('Distance', 'Inch',             'in',            0.0254 );
-        Unit.register('Time', 'Day',    'd',  86400);
-        Unit.register('Time', 'Hour',   'hr',  3600);
-        Unit.register('Time', 'Minute', 'm',     60);
-        Unit.register('Time', 'Second', 's',      1);
-
+        Unit.register('_reserved', 'nonUnited', '', 1);
+        Unit.register('amount', 'count', '', 1);
+        Unit.register('amount', 'mole', 'mol', 1);
+        Unit.register('distance', 'astronomicalUnit', 'au', 149597870700);
+        Unit.register('distance', 'kilometer',        'km',         1000      );
+        Unit.register('distance', 'meter',            'm',             1      );
+        Unit.register('distance', 'millimeter',       'mm',            0.001  );
+        Unit.register('distance', 'mile',             'mi',         1609.344  );
+        Unit.register('distance', 'yard',             'yd',            0.9144 );
+        Unit.register('distance', 'foot',             'ft',            0.30480);
+        Unit.register('distance', 'inch',             'in',            0.0254 );
+        Unit.register('time', 'day',    'd',  86400);
+        Unit.register('time', 'hour',   'hr',  3600);
+        Unit.register('time', 'minute', 'm',     60);
+        Unit.register('time', 'second', 's',      1);
 
         // register basic math operations
         operations.register('add',      function (a, b) { return a + b; });
@@ -170,15 +172,17 @@
         operations.register('multiply', function (a, b) { return a * b; });
         operations.register('divide',   function (a, b) { return a / b; });
 
-		return {
-            Measure: Measure,
-            Unit: Unit,
-            operations: operations
-        };
+        Object.defineProperties(Measure, {
+            Measure: { enumerable: true, value: Measure },
+            Unit: { enumerable: true, value: Unit },
+            operations: { enumerable: true, value: operations }
+        });
 
-	});
+        return Measure;
+
+    });
 
 }(
-	typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); }
-	// Boilerplate for AMD and Node
+    typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); }
+    // Boilerplate for AMD and Node
 ));
