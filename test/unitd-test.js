@@ -166,6 +166,31 @@
 							assert.match(e.message, '');
 						}
 					}
+				},
+				'as': {
+					'comparable unit': function () {
+						assert.same(new unitd.Measure(3, unitd.Unit.Distance.Foot).as('Inch').val, 36);
+					},
+					'unknown unit': function () {
+						try {
+							new unitd.Measure(3, unitd.Unit.Distance.Foot).as('Minute');
+							fail('Exception expected');
+						}
+						catch (e) {
+							assert(e instanceof Error);
+							assert.match(e.message, 'Unable to find unit [Minute]');
+						}
+					},
+					'incomparable unit': function () {
+						try {
+							new unitd.Measure(3, unitd.Unit.Distance.Foot).as(unitd.Unit.Time.Minute);
+							fail('Exception expected');
+						}
+						catch (e) {
+							assert(e instanceof Error);
+							assert.match(e.message, 'Unit Foot is not comparable to Minute');
+						}
+					}
 				}
 			},
 			'units': {

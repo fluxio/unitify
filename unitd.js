@@ -72,6 +72,20 @@
             this.precision = precision;
         }
 
+        Measure.prototype.as = function as(unit) {
+            if (!(unit instanceof Unit)) {
+                // lookup unit
+                unit = Unit[this.unit.type][unit];
+                if (!unit) {
+                    throw new Error('Unable to find unit [' + arguments[0] + ']');
+                }
+            }
+            if (!this.unit.isComparable(unit)) {
+                throw new Error('Unit ' + this.unit + ' is not comparable to ' + unit);
+            }
+            return new Measure(this.raw * this.unit.scale / unit.scale, unit, this.precision);
+        };
+
         function Unit() { throw new Error('Unit is not constructable'); }
         Object.defineProperty(Unit, 'prototype', { value: Unit.prototype });
         Unit.register = function register(type, name, abbr, scale) {
@@ -101,6 +115,7 @@
             Object.defineProperty(Unit[type], name, { enumerable: true, value: Object.create(Unit[type].prototype) });
             Object.defineProperties(Unit[type][name], {
                 name: { enumerable: true, value: name },
+                type: { enumerable: true, value: type },
                 abbr: { enumerable: true, value: abbr },
                 scale: { enumerable: true, value: scale },
                 toString: { value: function () { return name; } }
@@ -134,14 +149,20 @@
         // define basic units
         Unit.register('Reserved', 'NonUnited', '', 1);
         Unit.register('Amount', 'Count', '', 1);
+        Unit.register('Amount', 'Mole', 'mol', 1);
+        Unit.register('Distance', 'AstronomicalUnit', 'au', 149597870700);
         Unit.register('Distance', 'Kilometer',        'km',         1000      );
         Unit.register('Distance', 'Meter',            'm',             1      );
         Unit.register('Distance', 'Millimeter',       'mm',            0.001  );
-        Unit.register('Distance', 'Foot',             'ft',            0.30480);
         Unit.register('Distance', 'Mile',             'mi',         1609.344  );
         Unit.register('Distance', 'Yard',             'yd',            0.9144 );
+        Unit.register('Distance', 'Foot',             'ft',            0.30480);
         Unit.register('Distance', 'Inch',             'in',            0.0254 );
-        Unit.register('Distance', 'AstronomicalUnit', 'au', 149597870700);
+        Unit.register('Time', 'Day',    'd',  86400);
+        Unit.register('Time', 'Hour',   'hr',  3600);
+        Unit.register('Time', 'Minute', 'm',     60);
+        Unit.register('Time', 'Second', 's',      1);
+
 
         // register basic math operations
         operations.register('add',      function (a, b) { return a + b; });
