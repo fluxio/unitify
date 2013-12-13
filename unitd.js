@@ -104,7 +104,8 @@
         };
 
         Measure.prototype.toString = function toString() {
-            return this.unit.abbr ? this.raw.toPrecision(this.precision) + ' ' + this.unit.abbr : this.val;
+            var val = this.raw.toPrecision(this.precision);
+            return this.unit.abbr ? val + ' ' + this.unit.abbr : val;
         };
 
         function Unit() { throw new Error('Unit is not constructable'); }
