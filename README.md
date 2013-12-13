@@ -28,10 +28,10 @@ If your preferred environment is not supported, please let us know. Some feature
 Tested environments:
 - Node.js (0.6, 0.8. 0.10)
 - Chrome (stable)
-- Firefox (stable, ESR, should work in earlier versions)
-- IE (6-10)
-- Safari (5, 6, iOS 4-6, should work in earlier versions)
-- Opera (11, 12, should work in earlier versions)
+- Firefox (stable)
+- IE (11)
+- Safari (7)
+- Opera (12)
 
 Specific browser test are provided by [Travis CI](https://travis-ci.org/scothis/unitd) and [Sauce Labs' Open Sauce Plan](https://saucelabs.com/opensource). You can see [specific browser test results](https://saucelabs.com/u/scothis-unitd), although odds are they do not reference this specific release/branch/commit.
 
