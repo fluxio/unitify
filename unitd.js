@@ -43,6 +43,7 @@
         }
 
         function Measure(value, unit, precision) {
+            /*jshint maxcomplexity:15 */
             if (value instanceof Measure) {
                 return value;
             }
@@ -58,17 +59,21 @@
                 unit = undef;
             }
 
+            if (precision === undef && typeof value === 'string') {
+                // TODO strawman precision from value
+                precision = value.replace(/[^0-9]/, '').length;
+            }
+            if (typeof value !== 'number') {
+                value = Number(value).valueOf();
+            }
+
             if (typeof precision !== 'number') {
-                // TODO should we infer precision from value
                 precision = Number(precision).valueOf();
             }
             if (isNaN(precision)) {
                 precision = MAX_PRECISION;
             }
 
-            if (typeof value !== 'number') {
-                value = Number(value).valueOf();
-            }
             if (isNaN(value)) {
                 // TODO use non-coerced value in error message
                 throw new Error('A number is required, found [' + value + ']');
@@ -99,7 +104,7 @@
         };
 
         Measure.prototype.toString = function toString() {
-            return this.abbr ? this.val + ' ' + this.abbr : this.val;
+            return this.unit.abbr ? this.raw.toPrecision(this.precision) + ' ' + this.unit.abbr : this.val;
         };
 
         function Unit() { throw new Error('Unit is not constructable'); }

@@ -119,6 +119,13 @@
                             assert(e instanceof Error);
                             assert.match(e.message, 'A number is required');
                         }
+                    },
+                    'string precision': function () {
+                        assert.same(unitd('3').precision, 1);
+                        assert.same(unitd('3.0').precision, 2);
+                        assert.same(unitd('123.0').precision, 4);
+                        assert.same(unitd('123.0', 1).precision, 1);
+                        assert.same(unitd('123.0', 5).precision, 5);
                     }
                 },
                 'toString': function () {
