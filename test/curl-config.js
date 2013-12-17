@@ -10,7 +10,7 @@
 
     global.curl = {
         packages: [
-            { name: 'unitd', location: './', main: 'unitd' },
+            { name: 'unitify', location: './', main: 'unitify' },
             { name: 'curl', location: 'node_modules/curl/src/curl', main: 'curl' },
             { name: 'poly', location: 'node_modules/poly', main: 'poly' }
         ],

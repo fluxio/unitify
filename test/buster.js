@@ -7,7 +7,7 @@
 
 var config = exports;
 
-config['unitd:node'] = {
+config['unitify:node'] = {
     environment: 'node',
     rootPath: '../',
     tests: [
@@ -16,7 +16,7 @@ config['unitd:node'] = {
     ]
 };
 
-config['unitd:browser'] = {
+config['unitify:browser'] = {
     environment: 'browser',
     autoRun: false,
     rootPath: '../',

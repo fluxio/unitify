@@ -1,5 +1,5 @@
 {
-	"name": "unitd",
+	"name": "unitify",
 	"version": "0.0.0",
 	"description": "Unit awesomesauce",
 	"keywords": [],
@@ -11,9 +11,9 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/scothis/unitd.git"
+		"url": "https://github.com/vannevartech/unitify.git"
 	},
-	"bugs": "https://github.com/scothis/unitd/issues",
+	"bugs": "https://github.com/vannevartech/unitify/issues",
 	"maintainers": [
 		{
 			"name": "Scott Andrews",
@@ -26,7 +26,7 @@
 		"curl": "https://github.com/cujojs/curl/tarball/0.8.4",
 		"poly": "https://github.com/cujojs/poly/tarball/0.6.0"
 	},
-	"main": "./unitd",
+	"main": "./unitify",
 	"scripts": {
 		"test": "jshint . && buster test --node",
 		"ci": "npm test && sauceme -b test/browsers.json",

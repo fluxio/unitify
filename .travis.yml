@@ -7,5 +7,5 @@ script: npm run-script ci
 env:
   global:
   - BUSTER_TEST_OPT="--reporter specification"
-  - SAUCE_USERNAME=scothis-unitd
-  - secure: LxrBx5l/hFBSqJmGTIZXPparbspx7AOOpFrtTuLtFgvO2HG/6i6qZFqFm3p+Jrva1/2pmyDP7Q5UbtWreKe7Uj0CBW0B3RrsYJ79rmnY54aGavYO+9O7/0M6zDahXGiCNjoH5rY3ZC9HEWj9lHQm7j//JsBKSz1ZM6hStom1c64=
+  - SAUCE_USERNAME=vannevartech-unitify
+  - secure: "RSokvbT3BLK8Y+GDf3Mwc6UZy5IhE05O4xCroa/qECbnTgIv+J7af50al6tvkoRoSEVBkhvl7FvEqjDyMiKczw4GbU5OqNSITawUYsVBoVoHFTuqi1Hak2czct1KCQA9G5kVR3pjkJvjzuUeqnpWIz8coBEB7BwiULwW2Gi6w2s="

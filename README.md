@@ -1,4 +1,4 @@
-unitd.js
+unitify.js
 =======
 
 Units and conversions
@@ -8,7 +8,7 @@ Build Status
 ------------
 
 <table>
-  <tr><td>Master</td><td><a href="http://travis-ci.org/scothis/unitd" target="_blank"><img src="https://secure.travis-ci.org/scothis/unitd.png?branch=master" /></a></tr>
+  <tr><td>Master</td><td><a href="http://travis-ci.org/vannevartech/unitify" target="_blank"><img src="https://secure.travis-ci.org/vannevartech/unitify.png?branch=master" /></a></tr>
 </table>
 
 
@@ -33,7 +33,7 @@ Tested environments:
 - Safari (7)
 - Opera (12)
 
-Specific browser test are provided by [Travis CI](https://travis-ci.org/scothis/unitd) and [Sauce Labs' Open Sauce Plan](https://saucelabs.com/opensource). You can see [specific browser test results](https://saucelabs.com/u/scothis-unitd), although odds are they do not reference this specific release/branch/commit.
+Specific browser test are provided by [Travis CI](https://travis-ci.org/vannevartech/unitify) and [Sauce Labs' Open Sauce Plan](https://saucelabs.com/opensource). You can see [specific browser test results](https://saucelabs.com/u/vannevartech-unitify), although odds are they do not reference this specific release/branch/commit.
 
 
 Getting Started
@@ -43,17 +43,17 @@ rest.js can be installed via [npm](https://npmjs.org/), [Bower](http://twitter.g
 
 To install without source:
 
-    $ npm install unitd
+    $ npm install unitify
 
 or
 
-    $ bower install unitd
+    $ bower install unitify
 
 From source:
 
     $ npm install
 
-unitd.js is designed to run in a browser environment, utilizing [AMD modules](https://github.com/amdjs/amdjs-api/wiki/AMD), or within [Node.js](http://nodejs.org/).  [curl.js](https://github.com/cujojs/curl) is highly recommended as an AMD loader, although any loader should work.
+unitify.js is designed to run in a browser environment, utilizing [AMD modules](https://github.com/amdjs/amdjs-api/wiki/AMD), or within [Node.js](http://nodejs.org/).  [curl.js](https://github.com/cujojs/curl) is highly recommended as an AMD loader, although any loader should work.
 
 An ECMAScript 5 compatible environment is assumed.  Older browsers, ::cough:: IE, that do not support ES5 natively can be shimmed.  Any shim should work, although we've tested against cujo's [poly.js](https://github.com/cujojs/poly)
 
@@ -88,7 +88,7 @@ Copyright
 
 Copyright 2013 the original author or authors
 
-unitd.js is made available under the MIT license.  See LICENSE.txt for details.
+unitify.js is made available under the MIT license.  See LICENSE.txt for details.
 
 
 Change Log

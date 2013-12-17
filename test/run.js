@@ -8,13 +8,13 @@
 (function (buster, define) {
     'use strict';
 
-    define('unitd/test/run', ['curl/_privileged', 'domReady!'], function (curl) {
+    define('unitify/test/run', ['curl/_privileged', 'domReady!'], function (curl) {
 
         var modules = Object.keys(curl.cache).filter(function (moduleId) {
             return moduleId.indexOf('-test') > 0;
         });
 
-        define('unitd/test/run-faux', modules, function () {
+        define('unitify/test/run-faux', modules, function () {
             buster.run();
         });
 
