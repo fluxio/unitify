@@ -11,9 +11,9 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/vannevartech/unitify.git"
+		"url": "https://github.com/Vannevartech/unitify.git"
 	},
-	"bugs": "https://github.com/vannevartech/unitify/issues",
+	"bugs": "https://github.com/Vannevartech/unitify/issues",
 	"maintainers": [
 		{
 			"name": "Scott Andrews",

@@ -8,7 +8,7 @@ Build Status
 ------------
 
 <table>
-  <tr><td>Master</td><td><a href="http://travis-ci.org/vannevartech/unitify" target="_blank"><img src="https://secure.travis-ci.org/vannevartech/unitify.png?branch=master" /></a></tr>
+  <tr><td>Master</td><td><a href="http://travis-ci.org/Vannevartech/unitify" target="_blank"><img src="https://secure.travis-ci.org/Vannevartech/unitify.png?branch=master" /></a></tr>
 </table>
 
 
@@ -33,7 +33,7 @@ Tested environments:
 - Safari (7)
 - Opera (12)
 
-Specific browser test are provided by [Travis CI](https://travis-ci.org/vannevartech/unitify) and [Sauce Labs' Open Sauce Plan](https://saucelabs.com/opensource). You can see [specific browser test results](https://saucelabs.com/u/vannevartech-unitify), although odds are they do not reference this specific release/branch/commit.
+Specific browser test are provided by [Travis CI](https://travis-ci.org/Vannevartech/unitify) and [Sauce Labs' Open Sauce Plan](https://saucelabs.com/opensource). You can see [specific browser test results](https://saucelabs.com/u/vannevartech-unitify), although odds are they do not reference this specific release/branch/commit.
 
 
 Getting Started
